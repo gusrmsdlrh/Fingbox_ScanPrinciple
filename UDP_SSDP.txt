@@ -1,0 +1,24 @@
+UPnP 프로토콜이 활성화 되어있는 제품의 한해서 정보를 가져올때 사용하는 것 ex) 라우터
+
+
+SSDP Python 코드
+-------------------------------
+from scapy.all import *
+
+spoofedIPsrc="192.168.123.3"
+SSDPserver="239.255.255.250"
+ 
+payload = "M-SEARCH * HTTP/1.1\r\n" \
+"HOST:"+SSDPserver+":1900\r\n" \
+"ST:upnp:rootdevice\r\n" \
+"MAN: \"ssdp:discover\"\r\n" \
+"MX:2\r\n\r\n"
+ 
+ssdpRequest = IP(src=spoofedIPsrc,dst=SSDPserver) / UDP(sport=1900, dport= 1900) / payload
+sr1(ssdpRequest)
+-------------------------------
+
+전송결과
+![image](https://user-images.githubusercontent.com/40857478/52392837-f99a6280-2ae6-11e9-87f7-47caaa0732bf.png)
+
+![image](https://user-images.githubusercontent.com/40857478/52392851-03bc6100-2ae7-11e9-9c42-b1d2109cf71c.png)
