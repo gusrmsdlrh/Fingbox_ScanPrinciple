@@ -17,8 +17,7 @@
 > Step 1. 스캔을 시도하는 디바이스의 ARP 테이블을 확인하여 아이피와 MAC Address을 매핑하여 어플 화면에 뿌려준다.
 
 > Step 2. MAC Address에 해당하는 제조사을 확인하여 어플 화면에 뿌려준다. 
-      
-       > (핸드폰 같은 경우엔 MAC Address만으로 모델명까지 알 수 있다고 함.)
+    (핸드폰 같은 경우엔 MAC Address만으로 모델명까지 알 수 있다고 함??)
 
 > Step 3. UDP 프로토콜(SSDP, NBNS, MDNS, SNMP)을 이용하여 장치들의 정보를 긁어온다.
 
