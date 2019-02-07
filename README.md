@@ -5,8 +5,7 @@ Scapy로 작성하는 과정에서 팁을 적어본다.
 
 먼저 wireshark에서 해당 payload에 대한 show bytepacket한다음에 raw로 변환후 복사하여 python에서 아래를 수행하면 변환이 된다.
 > import binascii 
->> binascii.unhexlify('FFFFFFFFFFFF') 
-'\xff\xff\xff\xff\xff\xff'
+> binascii.unhexlify('') 
 
 
 # Scan Flow
