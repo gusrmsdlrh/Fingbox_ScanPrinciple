@@ -1,6 +1,13 @@
 # Fingbox_ScanPrinciple
 Fingbox에서 사용되는 스캔 원리를 분석하여 시나리오를 짜보며 Scapy로 파이썬 코드를 작성하여 직접 수행해본다.
 
+Scapy로 작성하는 과정에서 팁을 적어본다.
+
+먼저 wireshark에서 해당 payload에 대한 show bytepacket한다음에 raw로 변환후 복사하여 python에서 아래를 수행하면 변환이 된다.
+>>> import binascii 
+>>> binascii.unhexlify('FFFFFFFFFFFF') 
+'\xff\xff\xff\xff\xff\xff'
+
 
 # Scan Flow
 아래의 절차는 스캔하는 여러 과정을 스니핑하여 예상되는!! 시나리오이다.
