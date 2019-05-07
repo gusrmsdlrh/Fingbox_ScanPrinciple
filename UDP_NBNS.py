@@ -1,8 +1,6 @@
 from scapy.all import *
 
-spoofedIPsrc="192.168.123.3"
-SSDPserver="192.168.123.2"
- 
-payload='\x82(\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00 CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x00\x00!\x00\x01'
-ssdpRequest = IP(src=spoofedIPsrc,dst=SSDPserver) / UDP(sport=57730, dport=137) / payload
-sr1(ssdpRequest)
+
+payload="\x82\x28\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x20\x43\x4b\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x00\x00\x21\x00\x01"
+nbnsRequest = IP(dst=target) / UDP(sport=137, dport='netbios_ns') / payload
+response=sr1(nbnsRequest, verbose=0, timeout=1)
