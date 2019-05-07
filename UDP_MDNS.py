@@ -1,8 +1,4 @@
 from scapy.all import *
 
-spoofedIPsrc="192.168.123.3"
-SSDPserver="192.168.123.18"
-
-payload='\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\t_services\x07_dns-sd\x04_udp\x05local\x00\x00\x0c\x00\x01'
-ssdpRequest = IP(src=spoofedIPsrc,dst=SSDPserver) / UDP(sport=5353, dport=5353) / payload
-sr1(ssdpRequest)
+mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='_http._tcp.local.',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+response=sr1(mdnsRequest, verbose=0, timeout=1)
