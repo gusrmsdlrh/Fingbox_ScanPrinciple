@@ -1,8 +1,4 @@
 from scapy.all import *
 
-spoofedIPsrc="192.168.123.3"
-SSDPserver="192.168.123.7"
- 
-payload='0o\x02\x01\x00\x04\x06public\xa0b\x02\x04\x1bhM?\x02\x01\x00\x02\x01\x000T0\x0c\x06\x08+\x06\x01\x02\x01\x01\x01\x00\x05\x000\x0c\x06\x08+\x06\x01\x02\x01\x01\x02\x00\x05\x000\x0c\x06\x08+\x06\x01\x02\x01\x01\x04\x00\x05\x000\x0c\x06\x08+\x06\x01\x02\x01\x01\x05\x00\x05\x000\x0c\x06\x08+\x06\x01\x02\x01\x01\x06\x00\x05\x000\x0c\x06\x08+\x06\x01\x02\x01\x01\x07\x00\x05\x00'
-ssdpRequest = IP(src=spoofedIPsrc,dst=SSDPserver) / UDP(sport=161, dport=161) / payload
-sr1(ssdpRequest)
+snmpRequest = IP(dst=target)/UDP(sport=161)/SNMP(community="public",PDU=SNMPget(varbindlist=[SNMPvarbind(oid="1.3.6.1.2.1.1.1.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.2.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.4.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.5.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.6.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.7.0")]))
+response=sr1(snmpRequest, verbose=0, timeout=1)
