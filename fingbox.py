@@ -14,7 +14,7 @@ print
 
 # SSDP Packet
 payload = "M-SEARCH * HTTP/1.1\r\n" \
-"HOST:"+target+":1900\r\n" \
+"HOST:239.255.255.250:1900\r\n" \
 "ST:upnp:rootdevice\r\n" \
 "MAN: \"ssdp:discover\"\r\n" \
 "MX:2\r\n\r\n"
