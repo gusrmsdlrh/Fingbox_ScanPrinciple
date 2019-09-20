@@ -11,7 +11,7 @@ def ssdp():
 	"MX: 1\r\n"\
 	"ST: upnp:rootdevice\r\n\r\n"
  
-	ssdpRequest = IP(dst='239.255.255.250') / UDP(sport=1900, dport= 1900) / payload
+	ssdpRequest = IP(dst=target) / UDP(sport=1900, dport= 1900) / payload
 	print(Fore.CYAN+"[+] Send : SSDP Packet REQUEST"+Fore.RESET)
 	response=sr1(ssdpRequest, verbose=0, timeout=time)
 	print
@@ -40,6 +40,22 @@ def snmp():
 	response=sr1(snmpRequest, verbose=0, timeout=time)
 	print
 
+# VSTARCAM Packet
+def vstar():
+	payload='\x44\x48\x01\x01'
+	vstarRequest=IP(dst=target)/UDP(sport=6801, dport=8600)/payload
+	print(Fore.CYAN+"[+] Send : VSTARCAM Packet REQUEST"+Fore.RESET)
+	response=sr1(vstarRequest, verbose=0, timeout=time)
+	print
+
+# Shenzen Packet
+def shenzen():
+	payload='\xff\x00\x00\x00\x00\x00Z\xa5\x00\x00\x00\x00\x00\x00\x00\x00\n-\x00\x00\x00\x00\x00\x00'
+	shenzenRequest = IP(dst=target) / UDP(sport=34567, dport= 34569) / payload
+	print(Fore.CYAN+"[+] Send : Shenzen Packet REQUEST"+Fore.RESET)
+	resp=sr1(shenzenRequest, timeout=1, verbose=0)
+	print
+
 if __name__=="__main__":
 	if len(sys.argv) is not 2:
 		print(Fore.YELLOW+"[-] Example : python fingbox.py <TargetIP>"+Fore.RESET)
@@ -54,3 +70,5 @@ if __name__=="__main__":
 	nbns()
 	mdns()
 	snmp()
+	vstar()
+	shenzen()
