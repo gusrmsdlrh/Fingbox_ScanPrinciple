@@ -27,14 +27,14 @@ def nbns():
 
 #DNS Packet
 def dns():
-	dnsRequest = pk=IP(dst='192.168.1.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='31.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+	dnsRequest = pk=IP(dst='192.168.1.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='137.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : DNS Packet REQUEST"+Fore.RESET)
 	response=sr1(dnsRequest, verbose=0, timeout=time)
 	print
 
 # MNDS Packet
 def mdns():
-	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='137.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='1.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : MDNS Packet REQUEST"+Fore.RESET)
 	response=sr1(mdnsRequest, verbose=0, timeout=time)
 	print
@@ -86,5 +86,5 @@ if __name__=="__main__":
 	mdns()
 	mdns2()
 	snmp()
-	vstar()
-	shenzen()
+	#vstar()
+	#shenzen()
