@@ -11,6 +11,18 @@ def ssdp():
 	"MX: 1\r\n"\
 	"ST: upnp:rootdevice\r\n\r\n"
  
+	ssdpRequest = IP(dst='239.255.255.250') / UDP(sport=1900, dport= 1900) / payload
+	print(Fore.CYAN+"[+] Send : SSDP Packet REQUEST"+Fore.RESET)
+	response=sr1(ssdpRequest, verbose=0, timeout=time)
+	print
+
+def ssdp2():
+	payload = "M-SEARCH * HTTP/1.1\r\n" \
+	"HOST: 239.255.255.250:1900\r\n" \
+	"MAN: \"ssdp:discover\"\r\n" \
+	"MX: 1\r\n"\
+	"ST: upnp:rootdevice\r\n\r\n"
+ 
 	ssdpRequest = IP(dst=target) / UDP(sport=1900, dport= 1900) / payload
 	print(Fore.CYAN+"[+] Send : SSDP Packet REQUEST"+Fore.RESET)
 	response=sr1(ssdpRequest, verbose=0, timeout=time)
@@ -27,14 +39,14 @@ def nbns():
 
 #DNS Packet
 def dns():
-	dnsRequest = pk=IP(dst='192.168.1.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='137.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+	dnsRequest = pk=IP(dst='192.168.1.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='207.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : DNS Packet REQUEST"+Fore.RESET)
 	response=sr1(dnsRequest, verbose=0, timeout=time)
 	print
 
 # MNDS Packet
 def mdns():
-	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='1.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='207.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : MDNS Packet REQUEST"+Fore.RESET)
 	response=sr1(mdnsRequest, verbose=0, timeout=time)
 	print
@@ -46,6 +58,23 @@ def mdns2():
 	print(Fore.CYAN+"[+] Send : MDNS2 Packet REQUEST"+Fore.RESET)
 	response=sr1(mdns2Request, verbose=0, timeout=time)
 	print
+
+#MDNS3 Packet
+def mdns3():
+	payload='\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x05_http\x04_tcp\x05local\x00\x00\x0c\x00\x01\x05_rtsp\x04_tcp\x05local\x00\x00\x0c\x00\x01\t_services\x07_dns-sd\x04_udp\x05local\x00\x00\x0c\x00\x01\x05_svnp\x04_tcp\x05local\x00\x00\x0c\x00\x01'
+	mdns3Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/payload
+	print(Fore.CYAN+"[+] Send : MDNS3 Packet REQUEST"+Fore.RESET)
+	response=sr1(mdns3Request, verbose=0, timeout=time)
+	print
+
+#MDNS4 Packet
+def mdns4():
+	payload='\x00\x00\x00\x00\x00\x07\x00\x00\x00\x00\x00\x00\x04_CGI\x04_tcp\x05local\x00\x00\x0c\x00\x01\x06_adisk\x04_tcp\x05local\x00\x00\x0c\x00\x01\x0b_afpovertcp\x04_tcp\x05local\x00\x00\x0c\x00\x01\x05_http\x04_tcp\x05local\x00\x00\x0c\x00\x01\x05_psia\x04_tcp\x05local\x00\x00\x0c\x00\x01\t_services\x07_dns-sd\x04_udp\x05local\x00\x00\x0c\x00\x01\x0c_workstation\x04_tcp\x05local\x00\x00\x0c\x00\x01'
+	mdns4Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/payload
+	print(Fore.CYAN+"[+] Send : MDNS3 Packet REQUEST"+Fore.RESET)
+	response=sr1(mdns4Request, verbose=0, timeout=time)
+	print
+
 # SNMP Packet
 def snmp():
 	snmpRequest = IP(dst=target)/UDP(sport=161)/	SNMP(community="public",PDU=SNMPget(varbindlist=[SNMPvarbind(oid="1.3.6.1.2.1.1.1.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.2.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.4.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.5.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.6.0"),SNMPvarbind(oid="1.3.6.1.2.1.1.7.0")]))
@@ -81,10 +110,13 @@ if __name__=="__main__":
 	print
 
 	ssdp()
+	ssdp2()
 	nbns()
 	dns()
 	mdns()
 	mdns2()
-	snmp()
+	mdns3()
+	mdns4()
+	#snmp()
 	#vstar()
 	#shenzen()
