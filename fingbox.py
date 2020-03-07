@@ -2,7 +2,7 @@ from scapy.all import *
 import sys
 from colorama import Fore
 
-
+time=2
 # SSDP Packet
 def ssdp():
 	payload = "M-SEARCH * HTTP/1.1\r\n" \
@@ -29,7 +29,8 @@ def ssdp2():
 	response=sr1(ssdpRequest, verbose=0, timeout=time)
 	print
 
-def synology():	payload='\x124VxSYNO\xa4\x04\x00\x00\x02\x01\xa6\x04x\x00\x00\x00\x01\x04\x01\x00\x00\x00\xb0\x08\xc0\x01\x00\x00\x00\x00\x00\x00\xb1\x08\x00\x00\x00\x00\x00\x00\x00\x00\xb8\x08\xc0\x01\x00\x00\x00\x00\x00\x00\xb9\x08\x00\x00\x00\x00\x00\x00\x00\x00|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da'
+def synology():
+	payload='\x124VxSYNO\xa4\x04\x00\x00\x02\x01\xa6\x04x\x00\x00\x00\x01\x04\x01\x00\x00\x00\xb0\x08\xc0\x01\x00\x00\x00\x00\x00\x00\xb1\x08\x00\x00\x00\x00\x00\x00\x00\x00\xb8\x08\xc0\x01\x00\x00\x00\x00\x00\x00\xb9\x08\x00\x00\x00\x00\x00\x00\x00\x00|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da'
 	synol=IP(ds=target)/UDP(sport=1234, dport=9999)/payload
 	print(Fore.CYAN+"[+] Send : synology Packet REQUEST"+Fore.RESET)
 	response=sr1(synol, verbose=0, timeout=time)
@@ -37,7 +38,8 @@ def synology():	payload='\x124VxSYNO\xa4\x04\x00\x00\x02\x01\xa6\x04x\x00\x00\x0
 	
 # NBNS Packet
 #payload='\x82(\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00 CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x00\x00!\x00\x01'
-def nbns():	payload="\x82\x28\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x20\x43\x4b\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x00\x00\x21\x00\x01"
+def nbns():
+	payload="\x82\x28\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x20\x43\x4b\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x00\x00\x21\x00\x01"
 	nbnsRequest = IP(dst=target) / UDP(sport=137, dport='netbios_ns') / payload
 	print(Fore.CYAN+"[+] Send : NBNS Packet REQUEST"+Fore.RESET)
 	response=sr1(nbnsRequest, verbose=0, timeout=time)
@@ -45,7 +47,7 @@ def nbns():	payload="\x82\x28\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x20\x43\x4
 
 #DNS Packet
 def dns(reverse):
-	dnsRequest = pk=IP(dst='192.168.1.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname=reverse[3]+'.'+reverse[2]+'.'+reverse[1]+'.'+reverse[0]+'.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+	dnsRequest = pk=IP(dst='192.168.0.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname=reverse[3]+'.'+reverse[2]+'.'+reverse[1]+'.'+reverse[0]+'.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : DNS Packet REQUEST"+Fore.RESET)
 	response=sr1(dnsRequest, verbose=0, timeout=time)
 	print
