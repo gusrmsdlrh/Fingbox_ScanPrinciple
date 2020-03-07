@@ -14,6 +14,7 @@ def ssdp():
 	ssdpRequest = IP(dst='239.255.255.250') / UDP(sport=1900, dport= 1900) / payload
 	print(Fore.CYAN+"[+] Send : SSDP Packet REQUEST"+Fore.RESET)
 	response=sr1(ssdpRequest, verbose=0, timeout=time)
+	
 	print
 
 def ssdp2():
@@ -28,25 +29,30 @@ def ssdp2():
 	response=sr1(ssdpRequest, verbose=0, timeout=time)
 	print
 
+def synology():	payload='\x124VxSYNO\xa4\x04\x00\x00\x02\x01\xa6\x04x\x00\x00\x00\x01\x04\x01\x00\x00\x00\xb0\x08\xc0\x01\x00\x00\x00\x00\x00\x00\xb1\x08\x00\x00\x00\x00\x00\x00\x00\x00\xb8\x08\xc0\x01\x00\x00\x00\x00\x00\x00\xb9\x08\x00\x00\x00\x00\x00\x00\x00\x00|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da|\x1100:c0:ca:97:91:da'
+	synol=IP(ds=target)/UDP(sport=1234, dport=9999)/payload
+	print(Fore.CYAN+"[+] Send : synology Packet REQUEST"+Fore.RESET)
+	response=sr1(synol, verbose=0, timeout=time)
+	print
+	
 # NBNS Packet
 #payload='\x82(\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00 CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x00\x00!\x00\x01'
-def nbns():
-	payload="\x82\x28\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x20\x43\x4b\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x00\x00\x21\x00\x01"
+def nbns():	payload="\x82\x28\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x20\x43\x4b\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x00\x00\x21\x00\x01"
 	nbnsRequest = IP(dst=target) / UDP(sport=137, dport='netbios_ns') / payload
 	print(Fore.CYAN+"[+] Send : NBNS Packet REQUEST"+Fore.RESET)
 	response=sr1(nbnsRequest, verbose=0, timeout=time)
 	print
 
 #DNS Packet
-def dns():
-	dnsRequest = pk=IP(dst='192.168.1.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='207.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+def dns(reverse):
+	dnsRequest = pk=IP(dst='192.168.1.1')/UDP(dport=53)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname=reverse[3]+'.'+reverse[2]+'.'+reverse[1]+'.'+reverse[0]+'.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : DNS Packet REQUEST"+Fore.RESET)
 	response=sr1(dnsRequest, verbose=0, timeout=time)
 	print
 
 # MNDS Packet
-def mdns():
-	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname='207.1.168.192.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+def mdns(reverse):
+	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname=reverse[3]+'.'+reverse[2]+'.'+reverse[1]+'.'+reverse[0]+'.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : MDNS Packet REQUEST"+Fore.RESET)
 	response=sr1(mdnsRequest, verbose=0, timeout=time)
 	print
@@ -103,17 +109,16 @@ if __name__=="__main__":
 	if len(sys.argv) is not 2:
 		print(Fore.YELLOW+"[-] Example : python fingbox.py <TargetIP>"+Fore.RESET)
 		sys.exit()
-
-	time=1
 	target=sys.argv[1]
 	print(Fore.YELLOW+"------------Target : "+target+"-------------"+Fore.RESET)
 	print
-
+	reverse=(target.split('.'))
 	ssdp()
 	ssdp2()
+	#synology()
 	nbns()
-	dns()
-	mdns()
+	dns(reverse)
+	mdns(reverse)
 	mdns2()
 	mdns3()
 	mdns4()
