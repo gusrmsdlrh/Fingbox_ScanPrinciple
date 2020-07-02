@@ -2,28 +2,27 @@ from scapy.all import *
 import sys
 from colorama import Fore
 
-time=2
-# SSDP Packet
+time=1
+
+# SSDP1 dst=multicast packet
 def ssdp():
 	payload = "M-SEARCH * HTTP/1.1\r\n" \
 	"HOST: 239.255.255.250:1900\r\n" \
 	"MAN: \"ssdp:discover\"\r\n" \
 	"MX: 1\r\n"\
 	"ST: upnp:rootdevice\r\n\r\n"
- 
 	ssdpRequest = IP(dst='239.255.255.250') / UDP(sport=1900, dport= 1900) / payload
 	print(Fore.CYAN+"[+] Send : SSDP Packet REQUEST"+Fore.RESET)
 	response=sr1(ssdpRequest, verbose=0, timeout=time)
-	
 	print
 
+# SSDP2 dst=unicast packet
 def ssdp2():
 	payload = "M-SEARCH * HTTP/1.1\r\n" \
 	"HOST: 239.255.255.250:1900\r\n" \
 	"MAN: \"ssdp:discover\"\r\n" \
 	"MX: 1\r\n"\
 	"ST: upnp:rootdevice\r\n\r\n"
- 
 	ssdpRequest = IP(dst=target) / UDP(sport=1900, dport= 1900) / payload
 	print(Fore.CYAN+"[+] Send : SSDP Packet REQUEST"+Fore.RESET)
 	response=sr1(ssdpRequest, verbose=0, timeout=time)
@@ -54,7 +53,7 @@ def dns(reverse):
 
 # MNDS Packet
 def mdns(reverse):
-	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname=reverse[3]+'.'+reverse[2]+'.'+reverse[1]+'.'+reverse[0]+'.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
+	mdnsRequest = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport=5353)/DNS(opcode='QUERY', rd=0,rcode='ok', qdcount=1, qd=DNSQR(qname=reverse[3]+'.'+reverse[2]+'.'+reverse[1]+'.'+reverse[0]+'.in-addr.arpa',qtype='PTR', qclass='IN')/DNSQR(qname='_services._dns-sd._udp.local.',qtype='PTR', qclass='IN'))
 	print(Fore.CYAN+"[+] Send : MDNS Packet REQUEST"+Fore.RESET)
 	response=sr1(mdnsRequest, verbose=0, timeout=time)
 	print
@@ -62,7 +61,7 @@ def mdns(reverse):
 #MDNS2 Packet
 def mdns2():
 	payload='\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x06_adisk\x04_tcp\x05local\x00\x00\x0c\x00\x01\x0b_afpovertcp\x04_tcp\x05local\x00\x00\x0c\x00\x01\t_services\x07_dns-sd\x04_udp\x05local\x00\x00\x0c\x00\x01\x0c_workstation\x04_tcp\x05local\x00\x00\x0c\x00\x01'
-	mdns2Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/payload
+	mdns2Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport=5353)/payload
 	print(Fore.CYAN+"[+] Send : MDNS2 Packet REQUEST"+Fore.RESET)
 	response=sr1(mdns2Request, verbose=0, timeout=time)
 	print
@@ -70,7 +69,7 @@ def mdns2():
 #MDNS3 Packet
 def mdns3():
 	payload='\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x05_http\x04_tcp\x05local\x00\x00\x0c\x00\x01\x05_rtsp\x04_tcp\x05local\x00\x00\x0c\x00\x01\t_services\x07_dns-sd\x04_udp\x05local\x00\x00\x0c\x00\x01\x05_svnp\x04_tcp\x05local\x00\x00\x0c\x00\x01'
-	mdns3Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/payload
+	mdns3Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport=5353)/payload
 	print(Fore.CYAN+"[+] Send : MDNS3 Packet REQUEST"+Fore.RESET)
 	response=sr1(mdns3Request, verbose=0, timeout=time)
 	print
@@ -78,7 +77,7 @@ def mdns3():
 #MDNS4 Packet
 def mdns4():
 	payload='\x00\x00\x00\x00\x00\x07\x00\x00\x00\x00\x00\x00\x04_CGI\x04_tcp\x05local\x00\x00\x0c\x00\x01\x06_adisk\x04_tcp\x05local\x00\x00\x0c\x00\x01\x0b_afpovertcp\x04_tcp\x05local\x00\x00\x0c\x00\x01\x05_http\x04_tcp\x05local\x00\x00\x0c\x00\x01\x05_psia\x04_tcp\x05local\x00\x00\x0c\x00\x01\t_services\x07_dns-sd\x04_udp\x05local\x00\x00\x0c\x00\x01\x0c_workstation\x04_tcp\x05local\x00\x00\x0c\x00\x01'
-	mdns4Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport='mdns')/payload
+	mdns4Request = pk=IP(dst='224.0.0.251')/UDP(sport=5353, dport=5353)/payload
 	print(Fore.CYAN+"[+] Send : MDNS3 Packet REQUEST"+Fore.RESET)
 	response=sr1(mdns4Request, verbose=0, timeout=time)
 	print
