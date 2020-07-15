@@ -42,10 +42,10 @@ def ssdp():
                 device_type = scrape(resp.text, '<deviceType>', '</deviceType>')
                 friendly_name = scrape(resp.text, '<friendlyName>', '</friendlyName>')
                 ssdp_extract_name= device_type+" "+model_description+" "+friendly_name
-                print ssdp_extract_name
+                extract_match(ssdp_extract_name)
                 break
     except socket.timeout:
-        print "NOT Packet\n"
+        print "No Response Packet\n"
         ssdp2()
         #start=start+time
  
@@ -75,10 +75,10 @@ def ssdp2():
         device_type = scrape(resp.text, '<deviceType>', '</deviceType>')
         friendly_name = scrape(resp.text, '<friendlyName>', '</friendlyName>')
         ssdp_extract_name= device_type+" "+model_description+" "+friendly_name
-        print ssdp_extract_name
+        extract_match(ssdp_extract_name)
         print
     except socket.timeout:
-        print "NOT Packet\n"
+        print "No Response Packet\n"
         #start=start+time
     except socket.error as err:
         print str(err)+"\n"
@@ -90,7 +90,130 @@ def scrape(text, start_trig, end_trig):
     else:
         return False
 
-#def 
+def extract_match(string1):
+	device_list=[['router','switch','hub','gateway','modem', 'access point', 'accesspoint'],
+			['television', 'tv'],['programmable', 'controller'],['sensor', 'thermostat'],
+			['pc', 'laptop'],['camera'],['nas'],['video'],['trigger'],
+			['recorder'],['printer'],['socket'],['firewall'],['refrigerator'],
+			['monitor'],['watch'],['smartphone'],['healthcare'],['digital media receiver', 'media', 'digital'],
+			['consumer game', 'game']]
+
+	type=['router', 'tv','controller',
+		'sensor','laptop','camera',
+		'nas','video','trigger','recorder',
+		'printer','socket','firewall','refrigerator',
+		'monitor','watch','smartphone','healthcare',
+		'digital','game']
+
+	for j in range(20):
+		if type[j] == "router":
+			router_num=0 
+		elif type[j] == "tv":
+			tv_num=0
+		elif type[j] == "controller":
+			controller_num=0
+		elif type[j] == "sensor":
+			sensor_num=0
+		elif type[j] == "laptop":
+			laptop_num=0
+		elif type[j] == "camera":
+			camera_num=0
+		elif type[j] == "nas":
+			nas_num=0
+		elif type[j] == "video":
+			video_num=0
+		elif type[j] == "trigger":
+			trigger_num=0
+		elif type[j] == "recorder":
+			recorder_num=0
+		elif type[j] == "printer":
+			printer_num=0
+		elif type[j] == "socket":
+			socket_num=0
+		elif type[j] == "firewall":
+			firewall_num=0
+		elif type[j] == "refrigerator":
+			refrigerator_num=0
+		elif type[j] == "monitor":
+			monitor_num=0
+		elif type[j] == "watch":
+			watch_num=0
+		elif type[j] == "smartphone":
+			smartphone_num=0
+		elif type[j] == "healthcare":
+			healthcare_num=0
+		elif type[j] == "digital":
+			digital_num=0
+		elif type[j] == "game":
+			game_num=0
+
+		for i in device_list[j]:
+			#print i
+			#print j
+			if i in string1.lower():
+				#print i
+				#print string1.lower()
+				if type[j] == "router":
+					router_num=router_num+1 
+				elif type[j] == "tv":
+					tv_num=tv_num+1
+				elif type[j] == "controller":
+					controller_num=controller_num+1
+				elif type[j] == "sensor":
+					sensor_num=sensor_num+1
+				elif type[j] == "laptop":
+					laptop_num=laptop_num+1
+				elif type[j] == "camera":
+					camera_num=camera_num+1
+				elif type[j] == "nas":
+					nas_num=nas_num+1
+				elif type[j] == "video":
+					video_num=video_num+1
+				elif type[j] == "trigger":
+					trigger_num=trigger_num+1
+				elif type[j] == "recorder":
+					recorder_num=recorder_num+1
+				elif type[j] == "printer":
+					printer_num=printer_num+1
+				elif type[j] == "socket":
+					socket_num=socket_num+1
+				elif type[j] == "firewall":
+					firewall_num=firewall_num+1
+				elif type[j] == "refrigerator":
+					refrigerator_num=refrigerator_num+1
+				elif type[j] == "monitor":
+					monitor_num=monitor_num+1
+				elif type[j] == "watch":
+					watch_num=watch_num+1
+				elif type[j] == "smartphone":
+					smartphone_num=smartphone_num+1
+				elif type[j] == "healthcare":
+					healthcare_num=healthcare_num+1
+				elif type[j] == "digital":
+					digital_num=digital_num+1
+				elif type[j] == "game":
+					game_num=game_num+1
+
+	list_ls=[router_num, tv_num, controller_num, sensor_num,laptop_num,camera_num,nas_num,video_num,\
+		trigger_num,recorder_num,printer_num,socket_num,firewall_num,refrigerator_num,monitor_num,\
+		watch_num,smartphone_num,healthcare_num,digital_num,game_num]
+
+	maxValue = list_ls[0]
+	max_idx=0
+	for idx,val in enumerate(range(1, len(list_ls))):
+		if maxValue < list_ls[val]:
+
+			maxValue = list_ls[val]
+			max_idx=idx
+		elif maxValue == list_ls[val]:
+			print maxValue, list_ls[val]
+	if type[max_idx] == 0:
+		print "Response Data : "+string1
+		print "Device Type : Unknown"
+	else:
+		print "Response Data : "+string1
+		print "Device Type : "+type[max_idx]
+
 
 if __name__=="__main__":
         #set value
